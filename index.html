@@ -1,0 +1,491 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>سامانه استعلام فیش حقوقی</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Vazirmatn Font -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        body {
+            font-family: 'Vazirmatn', sans-serif;
+        }
+        @media print {
+            body {
+                background: white !important;
+                color: black !important;
+                padding: 0 !important;
+            }
+            .no-print {
+                display: none !important;
+            }
+            .print-container {
+                box-shadow: none !important;
+                border: 1px solid #e5e7eb !important;
+                margin: 0 auto !important;
+                width: 100% !important;
+                max-width: 800px !important;
+                padding: 1.5rem !important;
+            }
+        }
+    </style>
+</head>
+<body class="bg-slate-900 text-slate-100 min-h-screen flex flex-col justify-between antialiased selection:bg-amber-500 selection:text-white">
+
+    <!-- Header -->
+    <header class="no-print bg-slate-800/80 backdrop-blur border-b border-slate-700/60 sticky top-0 z-50">
+        <div class="max-w-6xl mx-auto px-4 py-4 flex items-center justify-between">
+            <div class="flex items-center space-x-3 space-x-reverse">
+                <div class="w-10 h-10 rounded-xl bg-amber-500/20 text-amber-500 flex items-center justify-center font-bold text-xl border border-amber-500/30">
+                    <i class="fa-solid fa-file-invoice-dollar"></i>
+                </div>
+                <div>
+                    <h1 class="text-lg font-bold text-slate-100">سامانه استعلام فیش حقوقی</h1>
+                    <p class="text-xs text-slate-400">سیستم یکپارچه مشاهده و چاپ فیش حقوق و دستمزد</p>
+                </div>
+            </div>
+            <div class="text-xs text-slate-400 bg-slate-900/60 px-3 py-1.5 rounded-lg border border-slate-700/50">
+                <i class="fa-regular fa-circle-check ml-1 text-emerald-400"></i> نسخه آنلاین سیستم
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Container -->
+    <main class="max-w-4xl mx-auto px-4 py-8 w-full flex-grow flex flex-col justify-center">
+        
+        <!-- Search Card -->
+        <section class="no-print bg-slate-800/70 border border-slate-700/70 rounded-3xl p-6 sm:p-8 mb-8 shadow-2xl backdrop-blur max-w-xl mx-auto w-full">
+            <div class="text-center mb-6">
+                <div class="inline-flex items-center justify-center w-14 h-14 rounded-2xl bg-amber-500/10 border border-amber-500/30 text-amber-400 mb-3 text-2xl shadow-inner">
+                    <i class="fa-solid fa-user-shield"></i>
+                </div>
+                <h2 class="text-xl sm:text-2xl font-bold text-slate-100 mb-1">ورود به پنل فیش حقوقی</h2>
+                <p class="text-xs text-slate-400">جهت احراز هویت و دسترسی به اطلاعات مالی، اطلاعات زیر را وارد نمایید</p>
+            </div>
+            
+            <form id="searchForm" class="space-y-5">
+                
+                <!-- کد ملی -->
+                <div>
+                    <label class="block text-xs font-semibold text-slate-300 mb-1.5 text-right">
+                        <i class="fa-regular fa-id-card ml-1 text-amber-400"></i> کد ملی (۱۰ رقم)
+                    </label>
+                    <div class="relative">
+                        <input 
+                            type="tel" 
+                            id="natCodeInput" 
+                            maxlength="10"
+                            placeholder="مثال: 0440675057" 
+                            class="w-full bg-slate-900 border border-slate-700 text-slate-100 rounded-xl px-4 py-3 text-center text-lg tracking-widest font-mono focus:outline-none focus:border-amber-500 focus:ring-1 focus:ring-amber-500 transition placeholder:text-slate-600 placeholder:tracking-normal placeholder:font-sans"
+                            required
+                        >
+                    </div>
+                </div>
+
+                <!-- کد پرسنلی دو بخشی -->
+                <div>
+                    <label class="block text-xs font-semibold text-slate-300 mb-1.5 text-right">
+                        <i class="fa-solid fa-barcode ml-1 text-amber-400"></i> کد پرسنلی ترکیبی
+                    </label>
+                    <div class="grid grid-cols-2 gap-3" dir="ltr">
+                        <!-- بخش اول: تاریخ آغاز به کار (۶ رقم) -->
+                        <div class="relative">
+                            <input 
+                                type="tel" 
+                                id="hireDateInput" 
+                                maxlength="6"
+                                placeholder="045388" 
+                                class="w-full bg-slate-900 border border-slate-700 text-slate-100 rounded-xl px-3 py-3 text-center text-base tracking-widest font-mono focus:outline-none focus:border-amber-500 focus:ring-1 focus:ring-amber-500 transition placeholder:text-slate-600 placeholder:tracking-normal"
+                                required
+                            >
+                            <span class="absolute -top-2 left-3 bg-slate-800 px-1.5 py-0.5 text-[10px] text-slate-400 rounded">آغاز کار (۶ رقم)</span>
+                        </div>
+                        
+                        <!-- بخش دوم: شماره پرسنلی (۳ رقم) -->
+                        <div class="relative">
+                            <input 
+                                type="tel" 
+                                id="empNoInput" 
+                                maxlength="3"
+                                placeholder="015" 
+                                class="w-full bg-slate-900 border border-slate-700 text-slate-100 rounded-xl px-3 py-3 text-center text-base tracking-widest font-mono focus:outline-none focus:border-amber-500 focus:ring-1 focus:ring-amber-500 transition placeholder:text-slate-600 placeholder:tracking-normal"
+                                required
+                            >
+                            <span class="absolute -top-2 left-3 bg-slate-800 px-1.5 py-0.5 text-[10px] text-slate-400 rounded">کد (۳ رقم)</span>
+                        </div>
+                    </div>
+                    <p class="text-[11px] text-slate-500 mt-1.5 text-right">کد پرسنلی شامل ۶ رقم تاریخ آغاز به کار + ۳ رقم شماره پرسنلی می‌باشد.</p>
+                </div>
+
+                <button 
+                    type="submit" 
+                    id="submitBtn"
+                    class="w-full bg-amber-500 hover:bg-amber-600 active:scale-[0.99] text-slate-950 font-bold py-3.5 px-6 rounded-xl transition flex items-center justify-center space-x-2 space-x-reverse shadow-lg shadow-amber-500/10 cursor-pointer"
+                >
+                    <i class="fa-solid fa-magnifying-glass"></i>
+                    <span>استعلام و مشاهده فیش حقوقی</span>
+                </button>
+            </form>
+        </section>
+
+        <!-- Loading State -->
+        <div id="loadingState" class="hidden text-center py-16">
+            <div class="inline-block animate-spin w-10 h-10 border-4 border-amber-500 border-t-transparent rounded-full mb-3"></div>
+            <p class="text-slate-400 text-sm">در حال دریافت و تطبیق اطلاعات از سرور...</p>
+        </div>
+
+        <!-- Error Alert -->
+        <div id="errorAlert" class="hidden bg-rose-500/10 border border-rose-500/30 text-rose-400 p-4 rounded-2xl text-center text-sm mb-6 max-w-xl mx-auto flex items-center justify-center space-x-2 space-x-reverse">
+            <i class="fa-solid fa-circle-exclamation text-base"></i>
+            <span id="errorMessage">اطلاعاتی با مشخصات وارد شده یافت نشد. لطفاً مقادیر را بررسی نمایید.</span>
+        </div>
+
+        <!-- Payslip View -->
+        <div id="payslipContainer" class="hidden">
+            
+            <!-- Payslip Actions Bar -->
+            <div class="no-print flex justify-end gap-3 mb-4">
+                <button 
+                    onclick="window.print()" 
+                    class="bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 px-4 py-2 rounded-xl text-sm font-medium transition flex items-center space-x-2 space-x-reverse"
+                >
+                    <i class="fa-solid fa-print ml-2 text-amber-400"></i>
+                    <span>چاپ فیش حقوقی</span>
+                </button>
+            </div>
+
+            <!-- Printable Payslip Card -->
+            <div class="print-container bg-slate-800/95 border border-slate-700/80 rounded-3xl p-6 sm:p-8 shadow-2xl text-slate-200">
+                
+                <!-- Payslip Header -->
+                <div class="border-b border-slate-700/80 pb-6 mb-6">
+                    <div class="flex flex-col sm:flex-row justify-between items-center gap-4">
+                        <div class="flex items-center space-x-3 space-x-reverse">
+                            <div class="w-12 h-12 rounded-2xl bg-amber-500 text-slate-950 flex items-center justify-center font-bold text-2xl shadow-lg">
+                                <i class="fa-solid fa-receipt"></i>
+                            </div>
+                            <div>
+                                <h2 class="text-xl font-bold text-slate-100">فیش حقوق و دستمزد پرسنل</h2>
+                                <p class="text-xs text-slate-400">گزارش کارکرد ماهانه و تسویه حساب مالی</p>
+                            </div>
+                        </div>
+                        <div class="text-left sm:text-right">
+                            <span class="inline-block bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 px-3 py-1 rounded-full text-xs font-semibold">
+                                وضعیت: نهایی شده
+                            </span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Personal Info Grid -->
+                <div class="grid grid-cols-2 sm:grid-cols-4 gap-4 bg-slate-900/60 p-4 rounded-2xl border border-slate-700/40 text-xs sm:text-sm mb-6">
+                    <div>
+                        <span class="text-slate-400 block text-xs mb-1">نام و نام خانوادگی</span>
+                        <span id="pName" class="font-bold text-slate-100">-</span>
+                    </div>
+                    <div>
+                        <span class="text-slate-400 block text-xs mb-1">کد پرسنلی</span>
+                        <span id="pCode" class="font-semibold text-amber-400 font-mono">-</span>
+                    </div>
+                    <div>
+                        <span class="text-slate-400 block text-xs mb-1">کد ملی</span>
+                        <span id="pNatCode" class="font-mono text-slate-200">-</span>
+                    </div>
+                    <div>
+                        <span class="text-slate-400 block text-xs mb-1">عنوان شغل</span>
+                        <span id="pJob" class="font-semibold text-slate-100">-</span>
+                    </div>
+                    <div>
+                        <span class="text-slate-400 block text-xs mb-1">نام پدر</span>
+                        <span id="pFather" class="text-slate-200">-</span>
+                    </div>
+                    <div>
+                        <span class="text-slate-400 block text-xs mb-1">وضعیت تاهل</span>
+                        <span id="pMarital" class="text-slate-200">-</span>
+                    </div>
+                    <div>
+                        <span class="text-slate-400 block text-xs mb-1">کارکرد ماه</span>
+                        <span id="pWorkDays" class="font-bold text-slate-100">-</span>
+                    </div>
+                    <div>
+                        <span class="text-slate-400 block text-xs mb-1">شماره همراه</span>
+                        <span id="pMobile" class="font-mono text-slate-200">-</span>
+                    </div>
+                </div>
+
+                <!-- Financial Details (Earnings & Deductions) -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+                    
+                    <!-- Earnings Column -->
+                    <div class="bg-slate-900/40 border border-slate-700/50 rounded-2xl p-4">
+                        <div class="flex items-center space-x-2 space-x-reverse border-b border-slate-700/60 pb-3 mb-3">
+                            <i class="fa-solid fa-arrow-trend-up text-emerald-400"></i>
+                            <h3 class="font-bold text-emerald-400 text-sm">شرح پرداختی‌ها و مزایا</h3>
+                        </div>
+                        <ul class="space-y-2.5 text-xs sm:text-sm">
+                            <li class="flex justify-between items-center">
+                                <span class="text-slate-300">مزد پایه ماهانه:</span>
+                                <span id="pBaseSalary" class="font-mono font-medium text-slate-100">۰ ریال</span>
+                            </li>
+                            <li class="flex justify-between items-center">
+                                <span class="text-slate-300">حق سنوات و عیدی:</span>
+                                <span id="pBonusSanavat" class="font-mono font-medium text-slate-100">۰ ریال</span>
+                            </li>
+                            <li class="flex justify-between items-center">
+                                <span class="text-slate-300">حق مسکن و بن کارگری:</span>
+                                <span id="pHousing" class="font-mono font-medium text-slate-100">۰ ریال</span>
+                            </li>
+                            <li class="flex justify-between items-center">
+                                <span class="text-slate-300">حق تاهل و اولاد:</span>
+                                <span id="pFamily" class="font-mono font-medium text-slate-100">۰ ریال</span>
+                            </li>
+                            <li class="flex justify-between items-center">
+                                <span class="text-slate-300">پاداش / اضافه کاری:</span>
+                                <span id="pOvertime" class="font-mono font-medium text-emerald-400">۰ ریال</span>
+                            </li>
+                            <li class="flex justify-between items-center">
+                                <span class="text-slate-300">مرخصی / آف:</span>
+                                <span id="pLeave" class="font-mono font-medium text-slate-100">۰ ریال</span>
+                            </li>
+                            <li class="flex justify-between items-center">
+                                <span class="text-slate-300">سایر پرداختی‌ها:</span>
+                                <span id="pOtherPayments" class="font-mono font-medium text-slate-100">۰ ریال</span>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <!-- Deductions Column -->
+                    <div class="bg-slate-900/40 border border-slate-700/50 rounded-2xl p-4">
+                        <div class="flex items-center space-x-2 space-x-reverse border-b border-slate-700/60 pb-3 mb-3">
+                            <i class="fa-solid fa-arrow-trend-down text-rose-400"></i>
+                            <h3 class="font-bold text-rose-400 text-sm">شرح کسورات ماهانه</h3>
+                        </div>
+                        <ul class="space-y-2.5 text-xs sm:text-sm">
+                            <li class="flex justify-between items-center">
+                                <span class="text-slate-300">مساعده دریافتی:</span>
+                                <span id="pAdvance" class="font-mono font-medium text-rose-300">۰ ریال</span>
+                            </li>
+                            <li class="flex justify-between items-center">
+                                <span class="text-slate-300">حق بیمه سهم کارمند:</span>
+                                <span id="pInsurance" class="font-mono font-medium text-slate-100">۰ ریال</span>
+                            </li>
+                            <li class="flex justify-between items-center">
+                                <span class="text-slate-300">قسط وام:</span>
+                                <span id="pLoan" class="font-mono font-medium text-slate-100">۰ ریال</span>
+                            </li>
+                            <li class="flex justify-between items-center">
+                                <span class="text-slate-300">فیش سفارش غذا:</span>
+                                <span id="pFood" class="font-mono font-medium text-slate-100">۰ ریال</span>
+                            </li>
+                            <li class="flex justify-between items-center">
+                                <span class="text-slate-300">جریمه / خسارت:</span>
+                                <span id="pPenalty" class="font-mono font-medium text-slate-100">۰ ریال</span>
+                            </li>
+                            <li class="flex justify-between items-center">
+                                <span class="text-slate-300">کسر کار / تاخیر:</span>
+                                <span id="pShortage" class="font-mono font-medium text-slate-100">۰ ریال</span>
+                            </li>
+                            <li class="flex justify-between items-center text-slate-400 text-xs pt-1 border-t border-slate-800">
+                                <span>مانده بدهی وام:</span>
+                                <span id="pLoanBalance" class="font-mono">۰ ریال</span>
+                            </li>
+                        </ul>
+                    </div>
+
+                </div>
+
+                <!-- Final Net Payable Highlight -->
+                <div class="bg-gradient-to-r from-amber-500/20 via-amber-500/10 to-transparent border border-amber-500/40 rounded-2xl p-5 mb-6 flex flex-col sm:flex-row justify-between items-center gap-3">
+                    <div>
+                        <span class="text-xs text-amber-300 block mb-1">مبلغ خالص قابل پرداخت (واریزی به حساب)</span>
+                        <div class="text-2xl sm:text-3xl font-extrabold text-amber-400 font-mono tracking-wide" id="pNetPayable">
+                            ۰ <span class="text-sm font-normal text-slate-300">ریال</span>
+                        </div>
+                    </div>
+                    <div class="text-left sm:text-right">
+                        <span class="text-xs text-slate-400 block mb-1">شماره شبا واریزی:</span>
+                        <span id="pSheba" class="font-mono text-xs text-slate-200 tracking-wider bg-slate-900/80 px-3 py-1.5 rounded-lg border border-slate-700 inline-block">-</span>
+                    </div>
+                </div>
+
+                <!-- Remarks & Footer -->
+                <div class="border-t border-slate-700/80 pt-4 flex flex-col sm:flex-row justify-between items-start sm:items-center text-xs text-slate-400 gap-2">
+                    <div>
+                        <span class="font-semibold text-slate-300">توضیحات و محاسبات: </span>
+                        <span id="pRemarks" class="text-slate-400">-</span>
+                    </div>
+                    <div>
+                        <span>امضای امور مالی و اداری</span>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="no-print bg-slate-950/90 border-t border-slate-800/80 py-6 px-4">
+        <div class="max-w-6xl mx-auto flex flex-col sm:flex-row items-center justify-center gap-3">
+            <img 
+                src="logo.png" 
+                alt="Logo" 
+                class="w-8 h-8 rounded-lg object-contain bg-slate-900 p-1 border border-slate-800"
+                onerror="this.style.display='none'"
+            >
+            <span class="text-xs text-slate-400 font-medium tracking-wide">
+                Powered by <a href="https://atozfnb.info" target="_blank" class="text-amber-400 hover:text-amber-300 font-semibold underline underline-offset-4 transition">atozfnb.info</a>
+            </span>
+        </div>
+    </footer>
+
+    <!-- Logic Script -->
+    <script>
+        const API_URL = "https://script.google.com/macros/s/AKfycbz1xzFNu-PtepfwA3Dg_hh8UQoO6Ol2bMVIzvyKk4FGZRqiNIgPYeXv4CF8so27ArJPBA/exec";
+        let cachedEmployees = null;
+
+        const searchForm = document.getElementById("searchForm");
+        const natCodeInput = document.getElementById("natCodeInput");
+        const hireDateInput = document.getElementById("hireDateInput");
+        const empNoInput = document.getElementById("empNoInput");
+        const submitBtn = document.getElementById("submitBtn");
+        const loadingState = document.getElementById("loadingState");
+        const errorAlert = document.getElementById("errorAlert");
+        const errorMessage = document.getElementById("errorMessage");
+        const payslipContainer = document.getElementById("payslipContainer");
+
+        // جابجایی خودکار فوکوس هنگام تکمیل ۶ رقم آغاز کار به باکس کد ۳ رقمی
+        hireDateInput.addEventListener("input", (e) => {
+            if (e.target.value.length >= 6) {
+                empNoInput.focus();
+            }
+        });
+
+        // تابع فرمت مبالغ ریالی با کاما
+        function formatMoney(num) {
+            if (!num || isNaN(num)) return "۰";
+            return Math.round(num).toLocaleString("fa-IR");
+        }
+
+        // تمیزکاری و تبدیل ارقام فارسی و عربی به انگلیسی
+        function normalizeStr(str) {
+            if (!str) return "";
+            return str.toString()
+                .trim()
+                .replace(/[۰-۹]/g, d => d.charCodeAt(0) - 1776)
+                .replace(/[٠-٩]/g, d => d.charCodeAt(0) - 1632)
+                .replace(/\D/g, "");
+        }
+
+        // فراخوانی داده‌ها از Google Apps Script
+        async function fetchEmployeeData() {
+            if (cachedEmployees) return cachedEmployees;
+            const res = await fetch(API_URL);
+            const data = await res.json();
+            cachedEmployees = Array.isArray(data) ? data : (data.data || []);
+            return cachedEmployees;
+        }
+
+        // پردازش فرم استعلام
+        searchForm.addEventListener("submit", async (e) => {
+            e.preventDefault();
+            
+            const rawNatCode = normalizeStr(natCodeInput.value);
+            const rawEmpNo = normalizeStr(empNoInput.value);
+            const rawHireDate = normalizeStr(hireDateInput.value);
+
+            if (!rawNatCode || !rawEmpNo) {
+                showError("لطفاً تمامی فیلدهای الزامی را تکمیل فرمایید.");
+                return;
+            }
+
+            // نرمال‌سازی کدهای وارد شده
+            const paddedNatCode = ("0000000000" + rawNatCode).slice(-10);
+            const paddedEmpNo = ("000" + rawEmpNo).slice(-3);
+
+            // نمایش حالت بارگذاری
+            loadingState.classList.remove("hidden");
+            errorAlert.classList.add("hidden");
+            payslipContainer.classList.add("hidden");
+            submitBtn.disabled = true;
+
+            try {
+                const employees = await fetchEmployeeData();
+                
+                // احراز هویت: تطبیق همزمان کد ملی و شماره پرسنلی
+                const employee = employees.find(emp => {
+                    const empCode = normalizeStr(emp.personnelCode);
+                    const empNat = normalizeStr(emp.nationalCode);
+                    
+                    const codeMatch = (empCode === paddedEmpNo) || (parseInt(empCode) === parseInt(rawEmpNo));
+                    const natMatch = (empNat === paddedNatCode) || (empNat === rawNatCode);
+
+                    return codeMatch && natMatch;
+                });
+
+                if (!employee) {
+                    throw new Error("پرسنلی با کد ملی و کد پرسنلی وارد شده یافت نشد. لطفاً اطلاعات را مجدداً بررسی فرمایید.");
+                }
+
+                renderPayslip(employee);
+                payslipContainer.classList.remove("hidden");
+                payslipContainer.scrollIntoView({ behavior: 'smooth' });
+
+            } catch (err) {
+                showError(err.message || "خطا در برقراری ارتباط با وب‌سرویس");
+            } finally {
+                loadingState.classList.add("hidden");
+                submitBtn.disabled = false;
+            }
+        });
+
+        function showError(msg) {
+            errorMessage.textContent = msg;
+            errorAlert.classList.remove("hidden");
+        }
+
+        // درج مقادیر در جدول فیش حقوقی
+        function renderPayslip(emp) {
+            document.getElementById("pName").textContent = emp.fullName || "-";
+            document.getElementById("pCode").textContent = emp.personnelCode || "-";
+            document.getElementById("pNatCode").textContent = emp.nationalCode || "-";
+            document.getElementById("pJob").textContent = emp.jobTitle || "-";
+            document.getElementById("pFather").textContent = emp.fatherName || "-";
+            document.getElementById("pMarital").textContent = emp.maritalStatus || "-";
+            document.getElementById("pWorkDays").textContent = (emp.workDays || 0) + " روز";
+            document.getElementById("pMobile").textContent = emp.mobile || "-";
+
+            // درآمدها و مزایا
+            document.getElementById("pBaseSalary").textContent = formatMoney(emp.baseSalary) + " ریال";
+            document.getElementById("pBonusSanavat").textContent = formatMoney(emp.bonusAndSanavat) + " ریال";
+            document.getElementById("pHousing").textContent = formatMoney(emp.housingAndAllowance) + " ریال";
+            document.getElementById("pFamily").textContent = formatMoney(emp.familyAllowance) + " ریال";
+            document.getElementById("pOvertime").textContent = formatMoney(emp.overtimePay) + " ریال";
+            document.getElementById("pLeave").textContent = formatMoney(emp.leaveAmount) + " ریال";
+            document.getElementById("pOtherPayments").textContent = formatMoney(emp.otherPayments) + " ریال";
+
+            // کسورات
+            document.getElementById("pAdvance").textContent = formatMoney(emp.advanceDeduction) + " ریال";
+            document.getElementById("pInsurance").textContent = formatMoney(emp.insuranceDeduction) + " ریال";
+            document.getElementById("pLoan").textContent = formatMoney(emp.loanDeduction) + " ریال";
+            document.getElementById("pFood").textContent = formatMoney(emp.foodDeduction) + " ریال";
+            document.getElementById("pPenalty").textContent = formatMoney(emp.penaltyDeduction) + " ریال";
+            document.getElementById("pShortage").textContent = formatMoney(emp.workShortage) + " ریال";
+            document.getElementById("pLoanBalance").textContent = formatMoney(emp.loanBalance) + " ریال";
+
+            // خالص پرداختی، شبا و توضیحات
+            document.getElementById("pNetPayable").innerHTML = `${formatMoney(emp.netPayable)} <span class="text-sm font-normal text-slate-300">ریال</span>`;
+            document.getElementById("pSheba").textContent = emp.sheba ? `IR${emp.sheba}` : "ثبت نشده";
+            document.getElementById("pRemarks").textContent = emp.description || "فاقد توضیحات";
+        }
+    </script>
+</body>
+</html>
